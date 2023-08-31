@@ -24,5 +24,6 @@ def display_board(board):
     for x in range(len(print_string)):
         print_string = print_string.replace(".", str(x), 1)
     print(f"|{print_string}|")
-board = create_board(9, 7)
-display_board(board)
+
+def stage_1(width, height):
+    display_board(create_board(width, height))
