@@ -27,3 +27,12 @@ def display_board(board):
 
 def stage_1(width, height):
     display_board(create_board(width, height))
+
+def is_valid_column(board, column_name):
+    valid_column = []
+    for x in range(get_width(board)):
+        valid_column.append(x)
+    if column_name != '':
+        if float(column_name) in valid_column:
+            return True
+    return False
