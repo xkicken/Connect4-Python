@@ -36,3 +36,9 @@ def is_valid_column(board, column_name):
         if float(column_name) in valid_column:
             return True
     return False
+
+def next_player(players, current_player):
+    if current_player == players[0]:
+        return players[1]
+    elif current_player == players[1]:
+        return players[0]
