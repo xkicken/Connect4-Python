@@ -42,3 +42,15 @@ def next_player(players, current_player):
         return players[1]
     elif current_player == players[1]:
         return players[0]
+
+def play_turn(board, player):
+    count = 0
+    while count != 1:
+        user_input = input(f"Player {player} -- enter the column: ")
+        if user_input.isdigit() == True:
+            if is_valid_column(board, user_input) == True:
+                count = 1
+                return user_input
+        elif user_input == "quit":
+            count = 1
+        
