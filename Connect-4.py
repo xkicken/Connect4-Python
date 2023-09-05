@@ -56,19 +56,6 @@ def play_turn(board, player):
             return "quit"
     return user_input
 
-def play_game(board):
-    count = 0
-    current_player = "X"
-    while count != 1:
-        display_board(board)
-        user_input = play_turn(board,current_player)
-        if user_input == "quit":
-            print(f"Result: player {current_player} quits!")
-            count = 1
-        else:
-            add_piece_to_column(board, current_player, user_input)
-            current_player = next_player("XO",current_player)
-
 def is_valid_move(board, column_name):
     if board[-1][int(column_name)] == ".":
         return True
@@ -133,3 +120,53 @@ def column_to_string(list, index):
     for x in list:
         temp_string += x[int(index)]
     return temp_string
+
+def is_winner(board, player):
+    if check_row(board,player) or check_column(board, player):
+        return True
+    else:
+        return False
+
+def check_column(board, player):
+    count = 1
+    for i in range(get_width(board)):
+        temp_string = column_to_string(board, i)
+        if temp_string.count(player) >= 4:
+            for i in range(len(temp_string) - 1):
+                if temp_string[i] == temp_string[i + 1] and temp_string[i] == player:
+                    count += 1
+        if count >= 4:
+            return True
+        count = 1
+    return False
+
+def check_row(board, player):
+    count = 1
+    for i in range(len(board)):
+        temp_string = row_to_string(board, i)
+        if temp_string.count(player) >= 4:
+            for i in range(len(temp_string) - 1):
+                if temp_string[i] == temp_string[i + 1] and temp_string[i] == player:
+                    count += 1
+        if count >= 4:
+            return True
+        count = 1
+    return False
+
+board = ['X...', 'X...', 'X...', 'X...']
+print(is_winner(board, 'X'))
+print(is_winner(board, 'O'))
+
+def play_game(board):
+    count = 0
+    current_player = "X"
+    while count != 1:
+        display_board(board)
+        user_input = play_turn(board,current_player)
+        if user_input == "quit":
+            print(f"Result: player {current_player} quits!")
+            count = 1
+        else:
+            add_piece_to_column(board, current_player, user_input)
+            is_winner(board, current_player)
+            current_player = next_player("XO",current_player)

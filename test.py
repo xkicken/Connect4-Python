@@ -1,27 +1,46 @@
+def is_winner(board, player):
+    if check_row(board,player) or check_column(board, player):
+        return True
+    else:
+        return False
+
+def check_column(board, player):
+    count = 1
+    for i in range(get_width(board)):
+        temp_string = column_to_string(board, i)
+        if temp_string.count(player) >= 4:
+            for i in range(len(temp_string) - 1):
+                if temp_string[i] == temp_string[i + 1] and temp_string[i] == player:
+                    count += 1
+        if count >= 4:
+            return True
+        count = 1
+    return False
+
+def check_row(board, player):
+    count = 1
+    for i in range(len(board)):
+        temp_string = row_to_string(board, i)
+        if temp_string.count(player) >= 4:
+            for i in range(len(temp_string) - 1):
+                if temp_string[i] == temp_string[i + 1] and temp_string[i] == player:
+                    count += 1
+        if count >= 4:
+            return True
+        count = 1
+    return False
+
 def get_width(board):
     return len(board[0])
-    
-def is_valid_column(board, column_name):
-    valid_column = []
-    for x in range(get_width(board)):
-        valid_column.append(x)
-    if column_name != '':
-        if float(column_name) in valid_column:
-            return True
-    return False
-    
-def is_valid_move(board, column_name):
-    if board[-1][int(column_name)] == ".":
-        return True
-    return False
-    
-def play_turn(board, player):
-    valid_move = False
-    while not valid_move:
-        user_input = input(f"Player {player} -- enter the column: ")
-        if user_input.isdigit() and is_valid_column(board, user_input) and is_valid_move(board, user_input):
-            valid_move = True
-        elif user_input == "quit":
-            return "quit"
-    return user_input
-    
+
+def row_to_string(list, index):
+    temp_string = ""
+    for x in list[int(index)]:
+        temp_string += x
+    return temp_string
+
+def column_to_string(list, index):
+    temp_string = ""
+    for x in list:
+        temp_string += x[int(index)]
+    return temp_string
