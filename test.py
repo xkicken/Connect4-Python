@@ -1,11 +1,27 @@
-def create_board(width, height):
-    width = max(4, min(width, 10))
-    height = max(4, min(height, 10))
+def get_width(board):
+    return len(board[0])
     
-    row = "." * width
-    board = [row for _ in range(height)]
+def is_valid_column(board, column_name):
+    valid_column = []
+    for x in range(get_width(board)):
+        valid_column.append(x)
+    if column_name != '':
+        if float(column_name) in valid_column:
+            return True
+    return False
     
-    return board
-b = create_board(20, 10)
-print(b)
- 	
+def is_valid_move(board, column_name):
+    if board[-1][int(column_name)] == ".":
+        return True
+    return False
+    
+def play_turn(board, player):
+    valid_move = False
+    while not valid_move:
+        user_input = input(f"Player {player} -- enter the column: ")
+        if user_input.isdigit() and is_valid_column(board, user_input) and is_valid_move(board, user_input):
+            valid_move = True
+        elif user_input == "quit":
+            return "quit"
+    return user_input
+    
