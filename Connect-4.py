@@ -1,10 +1,8 @@
 def create_board(width, height):
     width = max(4, min(width, 10))
     height = max(4, min(height, 10))
-    
     row = "." * width
     board = [row for _ in range(height)]
-    
     return board
 
 def get_width(board):
@@ -57,7 +55,7 @@ def play_turn(board, player):
         elif user_input == "quit":
             return "quit"
     return user_input
-    
+
 def play_game(board):
     count = 0
     current_player = "X"
@@ -67,7 +65,9 @@ def play_game(board):
         if user_input == "quit":
             print(f"Result: player {current_player} quits!")
             count = 1
-        current_player = next_player("XO",current_player)
+        else:
+            add_piece_to_column(board, current_player, user_input)
+            current_player = next_player("XO",current_player)
 
 def stage_2(width, height):
     board = create_board(width, height)
@@ -101,14 +101,12 @@ def get_free_row(board, column_index):
 
 def modify_board(board, column_index, row_index, player):
     temp_string = str(board[int(row_index)])
-    temp_string = temp_string[:column_index] + player + temp_string[column_index + 1:]
+    temp_string = temp_string[:int(column_index)] + player + temp_string[int(column_index) + 1:]
     board[int(row_index)] = temp_string
 
 def add_piece_to_column(board, player, column_name):
-    column_index = int(get_free_row(board, column_name))
-    temp_string =  str(board[column_index])
-    temp_string = temp_string[:int(column_name)] + player + temp_string[int(column_name) + 1:]
-    board[column_index] = temp_string
+    row_index = int(get_free_row(board, column_name))
+    modify_board(board, column_name, row_index, player)
 
 def stage_1(width, height):
     display_board(create_board(width, height))
@@ -120,6 +118,3 @@ def stage_2(width, height):
 def stage_3(width, height):
     board = create_board(width, height)
     play_game(board)
-
-
-stage_3(5, 4)
