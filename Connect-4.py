@@ -69,10 +69,6 @@ def play_game(board):
             add_piece_to_column(board, current_player, user_input)
             current_player = next_player("XO",current_player)
 
-def stage_2(width, height):
-    board = create_board(width, height)
-    play_game(board)
-
 def is_valid_move(board, column_name):
     if board[-1][int(column_name)] == ".":
         return True
@@ -86,9 +82,7 @@ def column_contents(board, column_index):
 
 def get_free_row(board, column_index):
     count = -1
-    temp_string = ""
-    for x in board:
-        temp_string += x[int(column_index)]
+    temp_string = column_to_string(board, column_index)
     if temp_string.isalpha() == True:
         return -1
     else:
@@ -108,6 +102,15 @@ def add_piece_to_column(board, player, column_name):
     row_index = int(get_free_row(board, column_name))
     modify_board(board, column_name, row_index, player)
 
+def is_full(board):
+    count = 0
+    for i in range(len(board)):
+        if row_to_string(board, i).isalpha():
+            count += 1
+    if count == len(board):
+        return True
+    return False
+
 def stage_1(width, height):
     display_board(create_board(width, height))
 
@@ -118,3 +121,15 @@ def stage_2(width, height):
 def stage_3(width, height):
     board = create_board(width, height)
     play_game(board)
+
+def row_to_string(list, index):
+    temp_string = ""
+    for x in list[int(index)]:
+        temp_string += x
+    return temp_string
+
+def column_to_string(list, index):
+    temp_string = ""
+    for x in list:
+        temp_string += x[int(index)]
+    return temp_string
