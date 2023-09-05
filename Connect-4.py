@@ -12,7 +12,7 @@ def get_width(board):
 
 def display_board(board):
     print_string = ""
-    for i in range(len(board)):
+    for i in reversed(range(len(board))):
         temp = board[i]
         print_string = ""
         for x in temp:
@@ -20,10 +20,15 @@ def display_board(board):
         print_string = print_string.strip()
         print(f"|{print_string}|")
     divder = "-" * len(print_string)
-    print(f"|{divder}|")
-    for x in range(len(print_string)):
-        print_string = print_string.replace(".", str(x), 1)
-    print(f"|{print_string}|")
+    print(f"|{divder}|")        
+    print(f"|{column_name(board)}|")
+
+def column_name(board):
+    temp_string = ""
+    for x in range(get_width(board)):
+        temp_string += str(x) + " "
+    temp_string = temp_string.strip()
+    return temp_string        
 
 def stage_1(width, height):
     display_board(create_board(width, height))
@@ -44,15 +49,15 @@ def next_player(players, current_player):
         return players[0]
 
 def play_turn(board, player):
-    count = 0
-    while count != 1:
+    valid_move = False
+    while not valid_move:
         user_input = input(f"Player {player} -- enter the column: ")
-        if user_input.isdigit() == True:
-            if is_valid_column(board, user_input) == True:
-                return user_input
+        if user_input.isdigit() and is_valid_column(board, user_input) and is_valid_move(board, user_input):
+            valid_move = True
         elif user_input == "quit":
             return "quit"
-
+    return user_input
+    
 def play_game(board):
     count = 0
     current_player = "X"
@@ -63,3 +68,58 @@ def play_game(board):
             print(f"Result: player {current_player} quits!")
             count = 1
         current_player = next_player("XO",current_player)
+
+def stage_2(width, height):
+    board = create_board(width, height)
+    play_game(board)
+
+def is_valid_move(board, column_name):
+    if board[-1][int(column_name)] == ".":
+        return True
+    return False
+
+def column_contents(board, column_index):
+    return_str = ""
+    for x in board:
+        return_str += x[column_index]
+    return return_str
+
+def get_free_row(board, column_index):
+    count = -1
+    temp_string = ""
+    for x in board:
+        temp_string += x[int(column_index)]
+    if temp_string.isalpha() == True:
+        return -1
+    else:
+        for x in temp_string:
+            if x == ".":
+                count +=1
+                return count
+            if x != ".":
+                count +=1
+
+def modify_board(board, column_index, row_index, player):
+    temp_string = str(board[int(row_index)])
+    temp_string = temp_string[:column_index] + player + temp_string[column_index + 1:]
+    board[int(row_index)] = temp_string
+
+def add_piece_to_column(board, player, column_name):
+    column_index = int(get_free_row(board, column_name))
+    temp_string =  str(board[column_index])
+    temp_string = temp_string[:int(column_name)] + player + temp_string[int(column_name) + 1:]
+    board[column_index] = temp_string
+
+def stage_1(width, height):
+    display_board(create_board(width, height))
+
+def stage_2(width, height):
+    board = create_board(width, height)
+    play_game(board)
+
+def stage_3(width, height):
+    board = create_board(width, height)
+    play_game(board)
+
+
+stage_3(5, 4)
