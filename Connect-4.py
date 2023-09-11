@@ -18,7 +18,7 @@ def display_board(board):
         print_string = print_string.strip()
         print(f"|{print_string}|")
     divder = "-" * len(print_string)
-    print(f"|{divder}|")        
+    print(f"|{divder}|")
     print(f"|{column_name(board)}|")
 
 def column_name(board):
@@ -26,7 +26,7 @@ def column_name(board):
     for x in range(get_width(board)):
         temp_string += str(x) + " "
     temp_string = temp_string.strip()
-    return temp_string        
+    return temp_string
 
 def stage_1(width, height):
     display_board(create_board(width, height))
@@ -50,7 +50,8 @@ def play_turn(board, player):
     valid_move = False
     while not valid_move:
         user_input = input(f"Player {player} -- enter the column: ")
-        if user_input.isdigit() and is_valid_column(board, user_input) and is_valid_move(board, user_input):
+        if (user_input.isdigit() and is_valid_column(board, user_input)
+             and is_valid_move(board, user_input)):
             valid_move = True
         elif user_input == "quit":
             return "quit"
@@ -75,14 +76,15 @@ def get_free_row(board, column_index):
     else:
         for x in temp_string:
             if x == ".":
-                count +=1
+                count += 1
                 return count
             if x != ".":
-                count +=1
+                count += 1
 
 def modify_board(board, column_index, row_index, player):
     temp_string = str(board[int(row_index)])
-    temp_string = temp_string[:int(column_index)] + player + temp_string[int(column_index) + 1:]
+    temp_string = temp_string[:int(column_index)] + \
+        player + temp_string[int(column_index) + 1:]
     board[int(row_index)] = temp_string
 
 def add_piece_to_column(board, player, column_name):
@@ -98,17 +100,6 @@ def is_full(board):
         return True
     return False
 
-def stage_1(width, height):
-    display_board(create_board(width, height))
-
-def stage_2(width, height):
-    board = create_board(width, height)
-    play_game(board)
-
-def stage_3(width, height):
-    board = create_board(width, height)
-    play_game(board)
-
 def row_to_string(list, index):
     temp_string = ""
     for x in list[int(index)]:
@@ -122,7 +113,7 @@ def column_to_string(list, index):
     return temp_string
 
 def is_winner(board, player):
-    if check_row(board,player) or check_column(board, player):
+    if check_row(board, player) or check_column(board, player):
         return True
     else:
         return False
@@ -133,7 +124,8 @@ def check_column(board, player):
         temp_string = column_to_string(board, i)
         if temp_string.count(player) >= 4:
             for i in range(len(temp_string) - 1):
-                if temp_string[i] == temp_string[i + 1] and temp_string[i] == player:
+                if (temp_string[i] == temp_string[i + 1] and 
+                temp_string[i] == player):
                     count += 1
         if count >= 4:
             return True
@@ -146,27 +138,37 @@ def check_row(board, player):
         temp_string = row_to_string(board, i)
         if temp_string.count(player) >= 4:
             for i in range(len(temp_string) - 1):
-                if temp_string[i] == temp_string[i + 1] and temp_string[i] == player:
+                if (temp_string[i] == temp_string[i + 1] and 
+                temp_string[i] == player):
                     count += 1
         if count >= 4:
             return True
         count = 1
-    return False
 
-board = ['X...', 'X...', 'X...', 'X...']
-print(is_winner(board, 'X'))
-print(is_winner(board, 'O'))
+    return False
 
 def play_game(board):
     count = 0
     current_player = "X"
     while count != 1:
         display_board(board)
-        user_input = play_turn(board,current_player)
+        user_input = play_turn(board, current_player)
         if user_input == "quit":
+            display_board(board)
             print(f"Result: player {current_player} quits!")
             count = 1
         else:
             add_piece_to_column(board, current_player, user_input)
-            is_winner(board, current_player)
-            current_player = next_player("XO",current_player)
+            if is_winner(board, current_player):
+                display_board(board)
+                print(f"Result: player {current_player} wins!")
+                count = 1
+            elif is_full(board):
+                display_board(board)
+                print(f"Result: draw")
+                count = 1
+            current_player = next_player("XO", current_player)
+
+def stage_4(width, height):
+    board = create_board(width, height)
+    play_game(board)
